@@ -72,7 +72,7 @@
                 catch (Exception ex)
                 {
                     renderer.PrintMessage(ex.Message);
-                    Thread.Sleep(700);
+                    Thread.Sleep(1000);
                 }
             }
         }
