@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C58DBBC0-5717-4A59-9561-7EF4E371F723}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chess</RootNamespace>
+    <AssemblyName>Chess</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Board\Common\Board.cs" />
+    <Compile Include="Engine\ChessStandardGame.cs" />
+    <Compile Include="Engine\ChessStartPoint.cs" />
+    <Compile Include="Engine\Command.cs" />
+    <Compile Include="Figures\Bishop.cs" />
+    <Compile Include="Figures\Common\Figure.cs" />
+    <Compile Include="Figures\King.cs" />
+    <Compile Include="Figures\Knight.cs" />
+    <Compile Include="Figures\Pawn.cs" />
+    <Compile Include="Figures\Queen.cs" />
+    <Compile Include="Figures\Rook.cs" />
+    <Compile Include="Helpers\ConsoleHelper.cs" />
+    <Compile Include="Helpers\Direction.cs" />
+    <Compile Include="Figures\Common\FigureColor.cs" />
+    <Compile Include="Figures\Common\FigureType.cs" />
+    <Compile Include="Helpers\GlobalConstants.cs" />
+    <Compile Include="Helpers\Move.cs" />
+    <Compile Include="Helpers\State.cs" />
+    <Compile Include="Helpers\Validator.cs" />
+    <Compile Include="Board\Common\IBoard.cs" />
+    <Compile Include="Figures\Common\IFigure.cs" />
+    <Compile Include="Movements\Common\IMovement.cs" />
+    <Compile Include="Movements\Common\IMovementStrategy.cs" />
+    <Compile Include="Players\Common\IPlayer.cs" />
+    <Compile Include="Renderers\Common\IRenderer.cs" />
+    <Compile Include="Movements\BishopMovement.cs" />
+    <Compile Include="Movements\KingMovement.cs" />
+    <Compile Include="Movements\KnightMovement.cs" />
+    <Compile Include="Movements\Common\MovementStrategy.cs" />
+    <Compile Include="Movements\PawnMovement.cs" />
+    <Compile Include="Movements\RookMovement.cs" />
+    <Compile Include="Players\Player.cs" />
+    <Compile Include="Helpers\Position.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderers\Renderer.cs" />
+    <Compile Include="Board\StandardBoardGame.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
