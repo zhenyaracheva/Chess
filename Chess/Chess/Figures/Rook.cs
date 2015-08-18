@@ -13,9 +13,9 @@
         {
         }
 
-        public override System.Collections.Generic.ICollection<IMovement> Move(IMovementStrategy strategy)
+        public override ICollection<IMovement> Move(IMovementStrategy strategy)
         {
-            throw new System.NotImplementedException();
+            return strategy.Moves(this.Type);
         }
     }
 }

@@ -77,8 +77,9 @@
 
         public void TakeFigure(Position position, IFigure figure, IPlayer secondPlayer)
         {
-            //TODO: Implements this:
-            throw new NotImplementedException("Implement Player takeFigure");
+            secondPlayer.RemoveFigure(position);
+            this.AddFigure(position, figure);
+            this.TakenFigures.Add(figure);
         }
 
         private IDictionary<Position, IFigure> GetStarGameFifures()
@@ -109,12 +110,18 @@
 
         public void RemoveFigure(Position position)
         {
-            this.figures.Remove(position);
+            if (this.figures.Keys.Contains(position))
+            {
+                this.figures.Remove(position);
+            }
         }
 
         public void AddFigure(Position position, IFigure figure)
         {
-            this.figures.Add(position, figure);
+            if (!this.figures.Keys.Contains(position))
+            {
+                this.figures.Add(position, figure);
+            }
         }
     }
 }

@@ -32,7 +32,7 @@
             this.renderer = new Renderer();
             this.strategy = new MovementStrategy();
         }
-        
+
         public void StartGame()
         {
             this.PlayChess();
@@ -51,18 +51,19 @@
                     renderer.PrintTakeCommandMessage(attacker);
                     var currentCommad = Console.ReadLine();
                     var move = Command.ParseCommand(currentCommad, gameBoard);
+
                     this.CheckPlayerContainsFigure(attacker, move.From);
                     this.CheckIfToPositionIsTakenByAttacker(attacker, move.To);
 
                     var playFigure = gameBoard.SeeFigureOnPosition(move.From.Row, move.From.Col);
+
                     var availableMovements = playFigure.Move(this.strategy);
                     this.CheckValidMove(playFigure, availableMovements, move);
 
-                    //TODO: 
+                    this.TakeDefenderFigure(attacker, defender, move, gameBoard);
 
-                    this.gameBoard.GetFigure(move.From.Row, move.From.Col);
-                    this.gameBoard.SetFigure(move.To.Row, move.To.Col, playFigure);
 
+                    this.MoveFigures(move, playFigure);
 
                     attacker.RemoveFigure(move.From);
                     attacker.AddFigure(move.To, playFigure);
@@ -74,6 +75,21 @@
                     renderer.PrintMessage(ex.Message);
                     Thread.Sleep(1000);
                 }
+            }
+        }
+
+        private void MoveFigures(Move move, IFigure playFigure)
+        {
+            this.gameBoard.GetFigure(move.From.Row, move.From.Col);
+            this.gameBoard.SetFigure(move.To.Row, move.To.Col, playFigure);
+        }
+
+        private void TakeDefenderFigure(IPlayer attacker, IPlayer defender, Move move, IBoard gameBoard)
+        {
+            var figure = gameBoard.SeeFigureOnPosition(move.To.Row, move.To.Col);
+            if (figure != null)
+            {
+                attacker.TakeFigure(move.To, figure, defender);
             }
         }
 
