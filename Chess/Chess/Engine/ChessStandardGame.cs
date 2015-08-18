@@ -62,7 +62,6 @@
 
                     this.TakeDefenderFigure(attacker, defender, move, gameBoard);
 
-
                     this.MoveFigures(move, playFigure);
 
                     attacker.RemoveFigure(move.From);

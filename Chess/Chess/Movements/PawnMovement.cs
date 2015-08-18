@@ -12,11 +12,14 @@
     {
         private int whitePlayerStartRow;
         private int blackPlayerStartRow;
+        private FigureColor oppositeColor;
 
         public void ValidateMove(IFigure figure, IBoard board, Move move)
         {
             whitePlayerStartRow = board.Size - 2;
             blackPlayerStartRow = 1;
+            oppositeColor = figure.Color == FigureColor.White ? FigureColor.Black : FigureColor.White;
+
 
             if (figure.Color == FigureColor.White)
             {
@@ -40,7 +43,9 @@
 
             if (figureToPosition == null)
             {
-                return ValidCommonBlackPlayerMoves(move);
+
+
+                return ValidCommonBlackPlayerMoves(move, figureToPosition, board);
             }
             else if (figureToPosition.Color == FigureColor.White)
             {
@@ -48,22 +53,29 @@
                 {
                     return true;
                 }
-
-                return ValidCommonBlackPlayerMoves(move);
             }
 
             return false;
         }
 
-        private bool ValidCommonBlackPlayerMoves(Move move)
+        private bool ValidCommonBlackPlayerMoves(Move move, IFigure figure, IBoard board)
         {
             if (blackPlayerStartRow == move.From.Row &&
-                    move.From.Col == move.To.Col &&
-                    (move.From.Row + 1 == move.To.Row || move.From.Row + 2 == move.To.Row))
+                move.From.Col == move.To.Col &&
+                move.From.Row + 2 == move.To.Row &&
+                board.SeeFigureOnPosition(move.From.Row + 1, move.From.Col) == null)
             {
                 return true;
             }
-            if (move.From.Row + 1 == move.To.Row && move.From.Col == move.To.Col)
+
+            if (blackPlayerStartRow == move.From.Row &&
+                    move.From.Col == move.To.Col &&
+                    move.From.Row + 1 == move.To.Row)
+            {
+                return true;
+            }
+
+            if (move.From.Row + 1 == move.To.Row && move.From.Col == move.To.Col && figure == null)
             {
                 return true;
             }
@@ -77,8 +89,7 @@
 
             if (figureToPosition == null)
             {
-                return ValidCommonWhitePlayerMoves(move);
-
+                return ValidCommonWhitePlayerMoves(move, figureToPosition, board);
             }
             else if (figureToPosition.Color == FigureColor.Black)
             {
@@ -86,22 +97,29 @@
                 {
                     return true;
                 }
-
-                return ValidCommonWhitePlayerMoves(move);
             }
 
             return false;
         }
 
-        private bool ValidCommonWhitePlayerMoves(Move move)
+        private bool ValidCommonWhitePlayerMoves(Move move, IFigure figure, IBoard board)
         {
             if (whitePlayerStartRow == move.From.Row &&
-                    move.From.Col == move.To.Col &&
-                    (move.From.Row - 1 == move.To.Row || move.From.Row - 2 == move.To.Row))
+                  move.From.Col == move.To.Col &&
+                  move.From.Row - 2 == move.To.Row &&
+                  board.SeeFigureOnPosition(move.From.Row - 1, move.From.Col) == null)
             {
                 return true;
             }
-            if (move.From.Row - 1 == move.To.Row && move.From.Col == move.To.Col)
+
+            if (whitePlayerStartRow == move.From.Row &&
+                    move.From.Col == move.To.Col &&
+                    move.From.Row - 1 == move.To.Row)
+            {
+                return true;
+            }
+
+            if (move.From.Row - 1 == move.To.Row && move.From.Col == move.To.Col && figure == null)
             {
                 return true;
             }
