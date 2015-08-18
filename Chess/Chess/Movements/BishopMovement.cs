@@ -8,9 +8,6 @@
 
     public class BishopMovement : IMovement
     {
-        private int rowDirection;
-        private int colDirection;
-
         public void ValidateMove(IFigure figure, IBoard board, Helpers.Move move)
         {
             var rowDistance = Math.Abs(move.From.Row - move.To.Row);
@@ -21,10 +18,8 @@
                 throw new InvalidOperationException("Invalid Bishop move!");
             }
 
-            var otherColor = figure.Color == FigureColor.White ? FigureColor.Black : FigureColor.White;
-
-            rowDirection = move.From.Row > move.To.Row ? -1 : 1;
-            colDirection = move.From.Col > move.To.Col ? -1 : 1;
+            int rowDirection = move.From.Row > move.To.Row ? -1 : 1;
+            int colDirection = move.From.Col > move.To.Col ? -1 : 1;
 
             var row = move.From.Row;
             var col = move.From.Col;
