@@ -10,77 +10,20 @@
 
     public class PawnMovement : IMovement
     {
-        private int whitePlayerStartRow;
-        private int blackPlayerStartRow;
         private FigureColor oppositeColor;
+        private int startRow;
+        private int direction;
 
         public void ValidateMove(IFigure figure, IBoard board, Move move)
         {
-            whitePlayerStartRow = board.Size - 2;
-            blackPlayerStartRow = 1;
+            startRow = figure.Color == FigureColor.White ? board.Size - 2 : 1;
             oppositeColor = figure.Color == FigureColor.White ? FigureColor.Black : FigureColor.White;
+            direction = (figure.Color == FigureColor.White) ? -1 : 1;
 
-
-            if (figure.Color == FigureColor.White)
+            if (!ValidWhitePLayerMoves(move, board))
             {
-                if (!ValidWhitePLayerMoves(move, board))
-                {
-                    throw new ArgumentException("White pawn cannot move that way!");
-                }
+                throw new ArgumentException("Pawn cannot move that way!");
             }
-            else if (figure.Color == FigureColor.Black)
-            {
-                if (!ValidBlackPlayerMoves(move, board))
-                {
-                    throw new ArgumentException("Black pawn cannot move that way!");
-                }
-            }
-        }
-
-        private bool ValidBlackPlayerMoves(Move move, IBoard board)
-        {
-            var figureToPosition = board.SeeFigureOnPosition(move.To.Row, move.To.Col);
-
-            if (figureToPosition == null)
-            {
-
-
-                return ValidCommonBlackPlayerMoves(move, figureToPosition, board);
-            }
-            else if (figureToPosition.Color == FigureColor.White)
-            {
-                if (move.From.Col - 1 == move.To.Col || move.From.Col + 1 == move.To.Col)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private bool ValidCommonBlackPlayerMoves(Move move, IFigure figure, IBoard board)
-        {
-            if (blackPlayerStartRow == move.From.Row &&
-                move.From.Col == move.To.Col &&
-                move.From.Row + 2 == move.To.Row &&
-                board.SeeFigureOnPosition(move.From.Row + 1, move.From.Col) == null)
-            {
-                return true;
-            }
-
-            if (blackPlayerStartRow == move.From.Row &&
-                    move.From.Col == move.To.Col &&
-                    move.From.Row + 1 == move.To.Row)
-            {
-                return true;
-            }
-
-            if (move.From.Row + 1 == move.To.Row && move.From.Col == move.To.Col && figure == null)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         private bool ValidWhitePLayerMoves(Move move, IBoard board)
@@ -91,7 +34,7 @@
             {
                 return ValidCommonWhitePlayerMoves(move, figureToPosition, board);
             }
-            else if (figureToPosition.Color == FigureColor.Black)
+            else if (figureToPosition.Color == oppositeColor)
             {
                 if (move.From.Col - 1 == move.To.Col || move.From.Col + 1 == move.To.Col)
                 {
@@ -104,22 +47,23 @@
 
         private bool ValidCommonWhitePlayerMoves(Move move, IFigure figure, IBoard board)
         {
-            if (whitePlayerStartRow == move.From.Row &&
+
+            if (startRow == move.From.Row &&
                   move.From.Col == move.To.Col &&
-                  move.From.Row - 2 == move.To.Row &&
-                  board.SeeFigureOnPosition(move.From.Row - 1, move.From.Col) == null)
+                  move.From.Row + (2 * direction) == move.To.Row &&
+                  board.SeeFigureOnPosition(move.From.Row + direction, move.From.Col) == null)
             {
                 return true;
             }
 
-            if (whitePlayerStartRow == move.From.Row &&
+            if (startRow == move.From.Row &&
                     move.From.Col == move.To.Col &&
-                    move.From.Row - 1 == move.To.Row)
+                    move.From.Row + direction == move.To.Row)
             {
                 return true;
             }
 
-            if (move.From.Row - 1 == move.To.Row && move.From.Col == move.To.Col && figure == null)
+            if (move.From.Row + direction == move.To.Row && move.From.Col == move.To.Col && figure == null)
             {
                 return true;
             }
