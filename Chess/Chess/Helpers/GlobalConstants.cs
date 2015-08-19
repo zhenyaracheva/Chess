@@ -9,6 +9,7 @@
     {
         public const int StandatdBoardGameSize = 8;
         public const int InitialRowsWithFigures = 2;
+        public const string ExceptionMessege = "Invalid {0} move!";
         public static readonly IList<Type> StartFigureOrderStandartGame = new List<Type>
                                             {
                                                 typeof(Rook),

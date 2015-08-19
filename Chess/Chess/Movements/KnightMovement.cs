@@ -30,7 +30,7 @@
 
             if (!ValidMove(move))
             {
-                throw new InvalidOperationException("Invalid Knigth move!");
+                throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
             }
         }
 

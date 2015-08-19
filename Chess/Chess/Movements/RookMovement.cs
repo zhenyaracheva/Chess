@@ -32,7 +32,7 @@
             }
             else
             {
-                throw new ArgumentException("Invalid rook move!");
+                throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
             }
         }
 

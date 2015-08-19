@@ -19,7 +19,7 @@
 
             if (!ValidKingMove(move))
             {
-                throw new InvalidOperationException("Invalid King move!");
+                throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
             }
         }
 

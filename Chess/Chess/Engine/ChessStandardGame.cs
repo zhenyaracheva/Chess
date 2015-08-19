@@ -60,8 +60,9 @@
                     var availableMovements = playFigure.Move(this.strategy);
                     this.CheckValidMove(playFigure, availableMovements, move);
 
-                    this.TakeDefenderFigure(attacker, defender, move, gameBoard);
 
+
+                    this.TakeDefenderFigure(attacker, defender, move, gameBoard);
                     this.MoveFigures(move, playFigure);
 
                     attacker.RemoveFigure(move.From);

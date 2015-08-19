@@ -22,7 +22,7 @@
 
             if (!ValidWhitePLayerMoves(move, board))
             {
-                throw new ArgumentException("Pawn cannot move that way!");
+                throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
             }
         }
 
