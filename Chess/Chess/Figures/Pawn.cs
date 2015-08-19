@@ -12,13 +12,7 @@
         public Pawn(FigureColor color)
             : base(color, FigureType.Pawn)
         {
-            this.IsFirstMove = true;
-            this.Direction = color == FigureColor.White ? Direction.Up : Direction.Down;
         }
-
-        public bool IsFirstMove { get; set; }
-
-        public Direction Direction { get; set; }
 
         public override ICollection<IMovement> Move(IMovementStrategy strategy)
         {
