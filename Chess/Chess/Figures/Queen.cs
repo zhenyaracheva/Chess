@@ -13,10 +13,5 @@
             : base(color, FigureType.Queen)
         {
         }
-
-        public override ICollection<IMovement> Move(IMovementStrategy strategy)
-        {
-            return strategy.Moves(this.Type);
-        }
     }
 }

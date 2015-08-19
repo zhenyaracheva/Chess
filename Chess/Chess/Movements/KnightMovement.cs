@@ -8,7 +8,7 @@
     using Chess.Helpers;
     using System.Collections.Generic;
 
-    public class KnightMovement : IMovement
+    public class KnightMovement : Movement, IMovement
     {
         private readonly List<int[]> Directions = new List<int[]>()
                                                                    {
@@ -26,6 +26,8 @@
             {
                 throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
             }
+
+            base.ValidateMove(figure, board, move);
         }
 
         private bool ValidMove(Move move)

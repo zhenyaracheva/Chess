@@ -86,23 +86,19 @@
         {
             var figures = new Dictionary<Position, IFigure>();
             var figureIndex = 0;
-            var currentRow = 0;
-
-            if (this.Color == FigureColor.White)
-            {
-                currentRow = GlobalConstants.StandatdBoardGameSize - 2;
-
-            }
+            var direction = this.Color == FigureColor.White ? -1 : 1;
+            var currentRow = this.Color == FigureColor.White ? GlobalConstants.StandatdBoardGameSize - 1 : 0;
 
             for (int row = 0; row < GlobalConstants.InitialRowsWithFigures; row++)
             {
                 for (int col = 0; col < GlobalConstants.StandatdBoardGameSize; col++)
                 {
-                    var currentPositon = new Position(row + currentRow, col);
+                    var currentPositon = new Position(currentRow, col);
                     var currentFigure = (IFigure)Activator.CreateInstance(GlobalConstants.StartFigureOrderStandartGame[figureIndex], this.Color);
                     figures.Add(currentPositon, currentFigure);
                     figureIndex++;
                 }
+                currentRow += direction;
             }
 
             return figures;

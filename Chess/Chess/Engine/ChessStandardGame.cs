@@ -60,6 +60,25 @@
                     var availableMovements = playFigure.Move(this.strategy);
                     this.CheckValidMove(playFigure, availableMovements, move);
 
+                    //find best place to check check
+                    // Check 
+                      var kingPosition = FindKingPosition(attacker);
+                      if (kingPosition == null)
+                      {
+                          Console.Clear();
+                          Console.WriteLine("GAME OVER!");
+                          break;
+                      }
+                     
+                    // try use attacker.Figures instead of gameBoard!
+                      if (this.CheckIfCheck(gameBoard, kingPosition, defender.Figures))
+                      {
+                          Console.Clear();
+                          Console.WriteLine("NAILED!");
+                          break;
+                      }
+
+
                     //TODO:
                     // Castling
                     // En passant
@@ -87,6 +106,52 @@
             }
         }
 
+        private bool CheckIfCheck(IBoard gameBoard, Position kingPosition, IDictionary<Position, IFigure> defenderFigures)
+        {
+            var defenderFiguresPositions = defenderFigures.Keys;
+            var counter = 0;
+
+            foreach (var position in defenderFiguresPositions)
+            {
+                var figure = defenderFigures[position];
+                var availableMovements = figure.Move(this.strategy);
+
+                try
+                {
+                    var tryMove = new Move(position, kingPosition);
+                    this.CheckValidMove(figure, availableMovements, tryMove);
+                }
+                catch (Exception ex)
+                {
+                    counter++;
+                }
+            }
+            if (counter == defenderFigures.Count)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+
+        private Position FindKingPosition(IPlayer attacker)
+        {
+            var keys = attacker.Figures.Keys;
+            Position kingPosition = null;
+
+            foreach (var key in keys)
+            {
+                if (attacker.Figures[key].Type == FigureType.King)
+                {
+                    kingPosition = key;
+                }
+            }
+
+            return kingPosition;
+        }
+
         private void MoveFigures(Move move, IFigure playFigure)
         {
             this.gameBoard.GetFigure(move.From.Row, move.From.Col);
@@ -106,20 +171,25 @@
         {
             var validMove = false;
             var fountExeprition = new Exception();
+            var counter = 0;
 
-            try
+            // try
+            // {
+            foreach (var movement in availableMovements)
             {
-                foreach (var movement in availableMovements)
+                try
                 {
                     movement.ValidateMove(playFigure, this.gameBoard, move);
                     validMove = true;
                     break;
                 }
+                catch (Exception ex)
+                {
+                    fountExeprition = ex;
+                }
+
             }
-            catch (Exception ex)
-            {
-                fountExeprition = ex;
-            }
+
 
             if (!validMove)
             {

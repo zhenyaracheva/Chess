@@ -9,14 +9,9 @@
 
     public class King : Figure, IFigure
     {
-        public King(FigureColor color)
+        public King(FigureColor color) 
             : base(color, FigureType.King)
         {
-        }
-
-        public override ICollection<IMovement> Move(IMovementStrategy strategy)
-        {
-            return strategy.Moves(this.Type);
         }
     }
 }

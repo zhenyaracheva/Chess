@@ -7,7 +7,7 @@
     using Chess.Helpers;
     using Chess.Movements.Common;
 
-    public class RookMovement : IMovement
+    public class RookMovement : Movement, IMovement
     {
         public void ValidateMove(IFigure figure, IBoard board, Move move)
         {
@@ -28,6 +28,9 @@
             var row = move.From.Row;
             var col = move.From.Col;
 
+            var finalRow = move.To.Row + rowDirection * (-1);
+            var finalCol = move.To.Col + colDirection * (-1);
+
             while (true)
             {
                 row += rowDirection;
@@ -38,11 +41,13 @@
                     throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
                 }
 
-                if (row == move.To.Row && col == move.To.Col)
+                if (row == finalRow && col == finalCol)
                 {
                     break;
                 }
             }
+
+            base.ValidateMove(figure, board, move);
         }
     }
 }

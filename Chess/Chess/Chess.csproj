@@ -53,7 +53,6 @@
     <Compile Include="Figures\Queen.cs" />
     <Compile Include="Figures\Rook.cs" />
     <Compile Include="Helpers\ConsoleHelper.cs" />
-    <Compile Include="Helpers\Direction.cs" />
     <Compile Include="Figures\Common\FigureColor.cs" />
     <Compile Include="Figures\Common\FigureType.cs" />
     <Compile Include="Helpers\GlobalConstants.cs" />
@@ -64,6 +63,7 @@
     <Compile Include="Figures\Common\IFigure.cs" />
     <Compile Include="Movements\Common\IMovement.cs" />
     <Compile Include="Movements\Common\IMovementStrategy.cs" />
+    <Compile Include="Movements\Common\Movement.cs" />
     <Compile Include="Players\Common\IPlayer.cs" />
     <Compile Include="Renderers\Common\IRenderer.cs" />
     <Compile Include="Movements\BishopMovement.cs" />

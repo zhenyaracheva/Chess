@@ -7,17 +7,19 @@
     using Chess.Movements.Common;
     using Chess.Helpers;
 
-    public class KingMovement : IMovement
+    public class KingMovement : Movement, IMovement
     {
         public void ValidateMove(IFigure figure, IBoard board, Move move)
         {
-            if (!ValidKingMove(move))
+            if (!ValidKingMove(figure, board, move))
             {
                 throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
             }
+
+            base.ValidateMove(figure, board, move);
         }
 
-        private bool ValidKingMove(Move move)
+        private bool ValidKingMove(IFigure figure, IBoard board, Move move)
         {
             var startRow = move.From.Row;
             var startCol = move.From.Col;

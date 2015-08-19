@@ -12,6 +12,8 @@
 
         FigureType Type { get; }
 
+        bool IsFirstMove { get; set; }
+
         ICollection<IMovement> Move(IMovementStrategy strategy);
     }
 }

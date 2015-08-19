@@ -8,7 +8,7 @@
     using Chess.Figures.Common;
     using Chess.Movements.Common;
 
-    public class PawnMovement : IMovement
+    public class PawnMovement : Movement, IMovement
     {
         private FigureColor oppositeColor;
         private int startRow;
@@ -20,23 +20,25 @@
             oppositeColor = figure.Color == FigureColor.White ? FigureColor.Black : FigureColor.White;
             direction = (figure.Color == FigureColor.White) ? -1 : 1;
 
-            if (!ValidWhitePLayerMoves(move, board))
+            if (!ValidPLayerMoves(move, board))
             {
                 throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
             }
+
+            base.ValidateMove(figure, board, move);
         }
 
-        private bool ValidWhitePLayerMoves(Move move, IBoard board)
+        private bool ValidPLayerMoves(Move move, IBoard board)
         {
             var figureToPosition = board.SeeFigureOnPosition(move.To.Row, move.To.Col);
 
             if (figureToPosition == null)
             {
-                return ValidCommonWhitePlayerMoves(move, figureToPosition, board);
+                return ValidEmptyCellMoves(move, figureToPosition, board);
             }
             else if (figureToPosition.Color == oppositeColor)
             {
-                if (move.From.Col - 1 == move.To.Col || move.From.Col + 1 == move.To.Col)
+                if (move.From.Row + direction == move.To.Row && (move.From.Col - 1 == move.To.Col || move.From.Col + 1 == move.To.Col))
                 {
                     return true;
                 }
@@ -45,7 +47,8 @@
             return false;
         }
 
-        private bool ValidCommonWhitePlayerMoves(Move move, IFigure figure, IBoard board)
+
+        private bool ValidEmptyCellMoves(Move move, IFigure figure, IBoard board)
         {
             if (startRow == move.From.Row &&
                   move.From.Col == move.To.Col &&

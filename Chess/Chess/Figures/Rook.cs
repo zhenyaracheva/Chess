@@ -12,10 +12,5 @@
             : base(color, FigureType.Rook)
         {
         }
-
-        public override ICollection<IMovement> Move(IMovementStrategy strategy)
-        {
-            return strategy.Moves(this.Type);
-        }
     }
 }

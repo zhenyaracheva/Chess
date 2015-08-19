@@ -7,7 +7,7 @@
     using Chess.Movements.Common;
     using Chess.Helpers;
 
-    public class BishopMovement : IMovement
+    public class BishopMovement : Movement, IMovement
     {
         public void ValidateMove(IFigure figure, IBoard board, Move move)
         {
@@ -33,11 +33,13 @@
                 row += rowDirection;
                 col += colDirection;
 
-                if (board.SeeFigureOnPosition(row, col) != null)
+                if ( board.SeeFigureOnPosition(row, col) != null)
                 {
                     throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
                 }
             }
+
+            base.ValidateMove(figure, board, move);
         }
     }
 }

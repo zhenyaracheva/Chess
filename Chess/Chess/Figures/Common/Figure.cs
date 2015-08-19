@@ -12,12 +12,18 @@
         {
             this.Color = color;
             this.Type = type;
+            this.IsFirstMove = true;
         }
 
         public FigureColor Color { get; private set; }
 
         public FigureType Type { get; private set; }
 
-        public abstract ICollection<IMovement> Move(IMovementStrategy strategy);
+        public bool IsFirstMove { get; set; }
+
+        public ICollection<IMovement> Move(IMovementStrategy strategy)
+        {
+            return strategy.Moves(this.Type);
+        }
     }
 }
