@@ -94,9 +94,26 @@
 
         private void CheckValidMove(IFigure playFigure, ICollection<IMovement> availableMovements, Move move)
         {
-            foreach (var movement in availableMovements)
+            var validMove = false;
+            var fountExeprition = new Exception();
+
+            try
             {
-                movement.ValidateMove(playFigure, this.gameBoard, move);
+                foreach (var movement in availableMovements)
+                {
+                    movement.ValidateMove(playFigure, this.gameBoard, move);
+                    validMove = true;
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                fountExeprition = ex;
+            }
+
+            if (!validMove)
+            {
+                throw fountExeprition;
             }
         }
 
