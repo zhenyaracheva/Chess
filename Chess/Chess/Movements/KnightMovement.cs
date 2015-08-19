@@ -21,13 +21,7 @@
         public void ValidateMove(IFigure figure, IBoard board, Move move)
         {
             var otherColor = figure.Color == FigureColor.White ? FigureColor.Black : FigureColor.White;
-            var toPositionFigure = board.SeeFigureOnPosition(move.To.Row, move.To.Col);
-
-            if (toPositionFigure != null && toPositionFigure.Color == figure.Color)
-            {
-                throw new InvalidOperationException("Position is already taken!");
-            }
-
+           
             if (!ValidMove(move))
             {
                 throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));

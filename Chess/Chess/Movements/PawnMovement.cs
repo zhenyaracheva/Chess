@@ -47,7 +47,6 @@
 
         private bool ValidCommonWhitePlayerMoves(Move move, IFigure figure, IBoard board)
         {
-
             if (startRow == move.From.Row &&
                   move.From.Col == move.To.Col &&
                   move.From.Row + (2 * direction) == move.To.Row &&

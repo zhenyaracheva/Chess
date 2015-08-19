@@ -45,8 +45,8 @@
                 try
                 {
                     renderer.RenderBoard(gameBoard);
-                    var attacker = GetAttacker(whitePlayer, blackPlayer);
-                    var defender = GetDefender(whitePlayer, blackPlayer);
+                    var attacker = GetPlayerByState(whitePlayer, blackPlayer, State.OnTheMove);
+                    var defender = GetPlayerByState(whitePlayer, blackPlayer, State.NotOnTheMove);
 
                     renderer.PrintTakeCommandMessage(attacker);
                     var currentCommad = Console.ReadLine();
@@ -60,6 +60,15 @@
                     var availableMovements = playFigure.Move(this.strategy);
                     this.CheckValidMove(playFigure, availableMovements, move);
 
+                    //TODO:
+                    // Castling
+                    // En passant
+                    // Promotion
+                    // Check
+                    // End of the game
+                    // - Win/Lose
+                    // - Draw
+                    // If you have nothing else to do: Time control
 
 
                     this.TakeDefenderFigure(attacker, defender, move, gameBoard);
@@ -147,21 +156,9 @@
             }
         }
 
-        private IPlayer GetAttacker(IPlayer firstPlayer, IPlayer secondPlayer)
+        private IPlayer GetPlayerByState(IPlayer firstPlayer, IPlayer secondPlayer, State state)
         {
-            if (firstPlayer.PlayerState == State.OnTheMove)
-            {
-                return firstPlayer;
-            }
-            else
-            {
-                return secondPlayer;
-            }
-        }
-
-        private IPlayer GetDefender(IPlayer firstPlayer, IPlayer secondPlayer)
-        {
-            if (firstPlayer.PlayerState == State.NotOnTheMove)
+            if (firstPlayer.PlayerState == state)
             {
                 return firstPlayer;
             }

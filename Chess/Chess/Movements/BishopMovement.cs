@@ -38,13 +38,6 @@
                     throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
                 }
             }
-
-            var toPositionFigure = board.SeeFigureOnPosition(move.To.Row, move.To.Col);
-
-            if (toPositionFigure != null && toPositionFigure.Color == figure.Color)
-            {
-                throw new InvalidOperationException("Position is already taken!");
-            }
         }
     }
 }
