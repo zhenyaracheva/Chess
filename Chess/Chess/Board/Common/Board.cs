@@ -11,9 +11,11 @@
         private IFigure[,] board;
         private int row;
         private int col;
+        private Validator validator;
 
         public Board(int size)
         {
+            this.validator = new Validator();
             this.Size = size;
             this.board = new Figure[this.Size, this.Size];
             this.InitializeStartGameBoard();
@@ -30,7 +32,7 @@
 
             set
             {
-                Validator.ValidRange(value, 0, this.board.GetLength(0) - 1, "Board row must be between 0 and " + this.board.GetLength(0));
+                this.validator.ValidRange(value, 0, this.board.GetLength(0) - 1, "Board row must be between 0 and " + this.board.GetLength(0));
 
                 this.row = value;
             }
@@ -45,7 +47,7 @@
 
             set
             {
-                Validator.ValidRange(value, 0, this.board.GetLength(1) - 1, "Board col must be between 0 and " + this.board.GetLength(1));
+                this.validator.ValidRange(value, 0, this.board.GetLength(1) - 1, "Board col must be between 0 and " + this.board.GetLength(1));
 
                 this.col = value;
             }

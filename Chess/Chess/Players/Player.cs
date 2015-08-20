@@ -17,9 +17,11 @@
         private FigureColor color;
         private IDictionary<Position, IFigure> figures;
         private IList<IFigure> takenFigures;
+        private Validator validator;
 
         public Player(string name, FigureColor color, State playerState)
         {
+            this.validator = new Validator();
             this.Name = name;
             this.Color = color;
             this.figures = this.GetStarGameFifures();
@@ -36,8 +38,8 @@
 
             set
             {
-                Validator.ValidateNullOrEmptyString(value, "Player name cannot be null or empty");
-                Validator.ValidRange(value.Length, Player.MinNameSymbolsCount, Player.MaxNameSymbolsCount, "Player name length must be between " + Player.MinNameSymbolsCount + " and " + Player.MaxNameSymbolsCount);
+                validator.ValidateNullOrEmptyString(value, "Player name cannot be null or empty");
+                validator.ValidRange(value.Length, Player.MinNameSymbolsCount, Player.MaxNameSymbolsCount, "Player name length must be between " + Player.MinNameSymbolsCount + " and " + Player.MaxNameSymbolsCount);
 
                 this.name = value;
             }
