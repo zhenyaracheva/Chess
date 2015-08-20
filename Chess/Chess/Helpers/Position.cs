@@ -21,7 +21,7 @@
         {
             var position = obj as Position;
 
-            if(this.Row== position.Row && this.Col== position.Col)
+            if (this.Row == position.Row && this.Col == position.Col)
             {
                 return true;
             }

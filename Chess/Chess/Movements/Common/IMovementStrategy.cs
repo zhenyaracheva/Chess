@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
 
-    using Chess.Helpers;
     using Chess.Figures.Common;
+    using Chess.Helpers;
 
     public interface IMovementStrategy
     {

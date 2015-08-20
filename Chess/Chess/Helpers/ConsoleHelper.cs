@@ -1,7 +1,8 @@
 ﻿namespace Chess.Helpers
 {
-    using Chess.Figures.Common;
     using System.Collections.Generic;
+
+    using Chess.Figures.Common;
 
     public static class ConsoleHelper
     {
@@ -72,7 +73,7 @@
                     { false, false, false, false, false, false, false, false, false, }
                 } 
             },
-            {FigureType.Queen, new[,]
+            { FigureType.Queen, new[,]
                 {
                     { false, false, false, false, false, false, false, false, false, },
                     { false, false, false, false, true, false, false, false, false, },

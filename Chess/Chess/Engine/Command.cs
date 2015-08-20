@@ -2,8 +2,8 @@
 {
     using System;
 
-    using Chess.Helpers;
     using Chess.Board.Common;
+    using Chess.Helpers;
 
     public static class Command
     {
@@ -20,7 +20,7 @@
             var nextPositionCol = GetPositionValue(parsedCommand[1][0], board);
             var to = new Position(nextPositionRow, nextPositionCol);
 
-            return new Move(from,to);
+            return new Move(from, to);
         }
 
         private static int GetPositionValue(char value, IBoard board)

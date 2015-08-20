@@ -4,14 +4,14 @@
 
     using Chess.Board.Common;
     using Chess.Figures.Common;
-    using Chess.Movements.Common;
     using Chess.Helpers;
+    using Chess.Movements.Common;
 
     public class KingMovement : Movement, IMovement
     {
         public void ValidateMove(IFigure figure, IBoard board, Move move)
         {
-            if (!ValidKingMove(figure, board, move))
+            if (!this.ValidKingMove(figure, board, move))
             {
                 throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
             }

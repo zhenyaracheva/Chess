@@ -3,8 +3,8 @@
     using System;
 
     using Chess.Figures;
-    using Chess.Helpers;
     using Chess.Figures.Common;
+    using Chess.Helpers;
 
     public abstract class Board : IBoard
     {
@@ -51,10 +51,9 @@
             }
         }
 
-
         public IFigure SeeFigureOnPosition(int row, int col)
         {
-            return board[row, col];
+            return this.board[row, col];
         }
 
         public void SetFigure(int row, int col, IFigure figure)

@@ -4,8 +4,8 @@
     using System.Collections.Generic;
 
     using Chess.Figures;
-    using Chess.Helpers;
     using Chess.Figures.Common;
+    using Chess.Helpers;
     using Chess.Players.Common;
 
     public class Player : IPlayer
@@ -22,7 +22,7 @@
         {
             this.Name = name;
             this.Color = color;
-            this.figures = GetStarGameFifures();
+            this.figures = this.GetStarGameFifures();
             this.takenFigures = new List<IFigure>();
             this.PlayerState = playerState;
         }
@@ -33,11 +33,11 @@
             {
                 return this.name;
             }
+
             set
             {
                 Validator.ValidateNullOrEmptyString(value, "Player name cannot be null or empty");
-                Validator.ValidRange(value.Length, Player.MinNameSymbolsCount, Player.MaxNameSymbolsCount,
-                    "Player name length must be between " + Player.MinNameSymbolsCount + " and " + Player.MaxNameSymbolsCount);
+                Validator.ValidRange(value.Length, Player.MinNameSymbolsCount, Player.MaxNameSymbolsCount, "Player name length must be between " + Player.MinNameSymbolsCount + " and " + Player.MaxNameSymbolsCount);
 
                 this.name = value;
             }
@@ -66,7 +66,6 @@
 
         public State PlayerState { get; set; }
 
-
         public IList<IFigure> TakenFigures
         {
             get
@@ -80,6 +79,22 @@
             secondPlayer.RemoveFigure(position);
             this.AddFigure(position, figure);
             this.TakenFigures.Add(figure);
+        }
+
+        public void RemoveFigure(Position position)
+        {
+            if (this.figures.Keys.Contains(position))
+            {
+                this.figures.Remove(position);
+            }
+        }
+
+        public void AddFigure(Position position, IFigure figure)
+        {
+            if (!this.figures.Keys.Contains(position))
+            {
+                this.figures.Add(position, figure);
+            }
         }
 
         private IDictionary<Position, IFigure> GetStarGameFifures()
@@ -98,26 +113,11 @@
                     figures.Add(currentPositon, currentFigure);
                     figureIndex++;
                 }
+
                 currentRow += direction;
             }
 
             return figures;
-        }
-
-        public void RemoveFigure(Position position)
-        {
-            if (this.figures.Keys.Contains(position))
-            {
-                this.figures.Remove(position);
-            }
-        }
-
-        public void AddFigure(Position position, IFigure figure)
-        {
-            if (!this.figures.Keys.Contains(position))
-            {
-                this.figures.Add(position, figure);
-            }
         }
     }
 }

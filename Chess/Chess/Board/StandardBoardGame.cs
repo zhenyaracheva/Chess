@@ -2,10 +2,10 @@
 {
     using System;
 
-    using Chess.Figures;
-    using Chess.Helpers;
     using Chess.Board.Common;
+    using Chess.Figures;
     using Chess.Figures.Common;
+    using Chess.Helpers;
 
     public class StandardBoardGame : Board, IBoard
     {
@@ -26,7 +26,7 @@
                     var currentFigureType = GlobalConstants.StartFigureOrderStandartGame[figureIndex];
                     this.SetFigure(firstPlayerRow, col, (IFigure)Activator.CreateInstance(currentFigureType, FigureColor.White));
                     this.SetFigure(secondPlayerRow, col, (IFigure)Activator.CreateInstance(currentFigureType, FigureColor.Black));
-                    figureIndex++;                   
+                    figureIndex++;
                 }
 
                 firstPlayerRow--;

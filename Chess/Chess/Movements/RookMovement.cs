@@ -28,8 +28,8 @@
             var row = move.From.Row;
             var col = move.From.Col;
 
-            var finalRow = move.To.Row + rowDirection * (-1);
-            var finalCol = move.To.Col + colDirection * (-1);
+            var finalRow = move.To.Row + (rowDirection * (-1));
+            var finalCol = move.To.Col + (colDirection * (-1));
 
             while (true)
             {

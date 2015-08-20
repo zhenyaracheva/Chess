@@ -1,8 +1,8 @@
 ﻿namespace Chess.Movements.Common
 {
-    using Chess.Helpers;
     using Chess.Board.Common;
     using Chess.Figures.Common;
+    using Chess.Helpers;
 
     public interface IMovement
     {

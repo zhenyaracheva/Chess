@@ -2,9 +2,9 @@
 {
     using System;
 
-    using Chess.Helpers;
     using Chess.Board.Common;
     using Chess.Figures.Common;
+    using Chess.Helpers;
     using Chess.Players.Common;
     using Chess.Renderers.Common;
 
@@ -20,14 +20,14 @@
         public void PrintMessage(string message)
         {
             this.ClearConsoleInRange();
-            Console.SetCursorPosition(Console.BufferWidth / 2 - message.Length/2, 0);
+            Console.SetCursorPosition((Console.BufferWidth / 2) - (message.Length / 2), 0);
             Console.Write(message);
         }
 
         public void PrintTakeCommandMessage(IPlayer player)
         {
             this.ClearConsoleInRange();
-            Console.SetCursorPosition(Console.BufferWidth / 2 - player.Name.Length, 0);
+            Console.SetCursorPosition((Console.BufferWidth / 2) - player.Name.Length, 0);
             Console.Write(player.Name + ": ");
         }
 
@@ -44,17 +44,17 @@
         public void RenderBoard(IBoard board)
         {
             int counter = 0;
-            int startRow = Console.BufferHeight / 2 - ((board.Size / 2) * BoardCellSymbolsCount);
-            int startCol = Console.BufferWidth / 2 - ((board.Size / 2) * BoardCellSymbolsCount);
+            int startRow = (Console.BufferHeight / 2) - ((board.Size / 2) * BoardCellSymbolsCount);
+            int startCol = (Console.BufferWidth / 2) - ((board.Size / 2) * BoardCellSymbolsCount);
 
-            PrintBoardBorder(startRow - Renderer.BorderSize, startCol - Renderer.BorderSize, board);
+            this.PrintBoardBorder(startRow - Renderer.BorderSize, startCol - Renderer.BorderSize, board);
 
             for (int row = 0; row < board.Size; row++)
             {
                 for (int col = 0; col < board.Size; col++)
                 {
-                    int printRow = startRow + row * BoardCellSymbolsCount;
-                    int printCol = startCol + col * BoardCellSymbolsCount;
+                    int printRow = startRow + (row * BoardCellSymbolsCount);
+                    int printCol = startCol + (col * BoardCellSymbolsCount);
                     ConsoleColor color = counter % 2 == 0 ? Renderer.DarkBoardCells : Renderer.LigthBoardCells;
                     var figure = board.SeeFigureOnPosition(row, col);
                     this.PrintCell(printRow, printCol, color, figure);
@@ -72,36 +72,36 @@
         {
             Console.BackgroundColor = ConsoleColor.DarkBlue;
 
-            int HorizontalBoardSymbolTopRow = (Console.BufferWidth / 2) - ((board.Size / 2) * BoardCellSymbolsCount) - 2;
+            int horizontalBoardSymbolTopRow = (Console.BufferWidth / 2) - ((board.Size / 2) * BoardCellSymbolsCount) - 2;
             int totalBoardCols = board.Size * Renderer.BoardCellSymbolsCount;
-            var totalCols = totalBoardCols + 2 * Renderer.BorderSize;
-            int startBoardCol = ((Console.BufferHeight / 2) - totalCols / 2) + BoardCellSymbolsCount / 2 + Renderer.BorderSize;
-            PrintBoardSide(startRow, startRow + Renderer.BorderSize, startCol, startCol + totalCols);
-            PrintHorizontalSymbols(startBoardCol, totalBoardCols, HorizontalBoardSymbolTopRow, board, Renderer.HorizontalBoardFirstSymbol);
+            var totalCols = totalBoardCols + (2 * Renderer.BorderSize);
+            int startBoardCol = ((Console.BufferHeight / 2) - totalCols / 2) + (BoardCellSymbolsCount / 2) + Renderer.BorderSize;
+            this.PrintBoardSide(startRow, startRow + Renderer.BorderSize, startCol, startCol + totalCols);
+            this.PrintHorizontalSymbols(startBoardCol, totalBoardCols, horizontalBoardSymbolTopRow, board, Renderer.HorizontalBoardFirstSymbol);
 
-            int HorizontalBoardSymbolBottomRow = (Console.BufferWidth / 2) + ((board.Size / 2) * BoardCellSymbolsCount) + 1;
-            var bottomStartRow = Console.BufferHeight / 2 + (board.Size / 2 * Renderer.BoardCellSymbolsCount);
-            PrintBoardSide(bottomStartRow, bottomStartRow + Renderer.BorderSize, startCol, startCol + totalCols);
-            PrintHorizontalSymbols(startBoardCol, totalBoardCols, HorizontalBoardSymbolBottomRow, board, Renderer.HorizontalBoardFirstSymbol);
+            int horizontalBoardSymbolBottomRow = (Console.BufferWidth / 2) + ((board.Size / 2) * BoardCellSymbolsCount) + 1;
+            var bottomStartRow = (Console.BufferHeight / 2) + (board.Size / 2 * Renderer.BoardCellSymbolsCount);
+            this.PrintBoardSide(bottomStartRow, bottomStartRow + Renderer.BorderSize, startCol, startCol + totalCols);
+            this.PrintHorizontalSymbols(startBoardCol, totalBoardCols, horizontalBoardSymbolBottomRow, board, Renderer.HorizontalBoardFirstSymbol);
 
             int totalBoardRows = board.Size * BoardCellSymbolsCount;
             int varticalBoardSymbolLeftCol = (Console.BufferHeight / 2) - ((board.Size / 2) * BoardCellSymbolsCount) - 2;
-            var totalRows = board.Size * Renderer.BoardCellSymbolsCount + Renderer.BorderSize;
-            int startBoardRow = ((Console.BufferHeight / 2) - totalCols / 2) + BoardCellSymbolsCount / 2 + Renderer.BorderSize;
-            PrintBoardSide(startRow, startRow + totalRows, startCol, startCol + Renderer.BorderSize);
-            PrintVerticalSymbols(startBoardRow, totalBoardRows, varticalBoardSymbolLeftCol, board, Renderer.VerticalBoardFirstSymbol);
+            var totalRows = (board.Size * Renderer.BoardCellSymbolsCount) + Renderer.BorderSize;
+            int startBoardRow = ((Console.BufferHeight / 2) - totalCols / 2) + (BoardCellSymbolsCount / 2) + Renderer.BorderSize;
+            this.PrintBoardSide(startRow, startRow + totalRows, startCol, startCol + Renderer.BorderSize);
+            this.PrintVerticalSymbols(startBoardRow, totalBoardRows, varticalBoardSymbolLeftCol, board, Renderer.VerticalBoardFirstSymbol);
 
             var rigthBorderStartCol = Console.BufferWidth / 2 + (board.Size * Renderer.BoardCellSymbolsCount / 2);
             int varticalBoardSymbolRigthCol = (Console.BufferHeight / 2) + ((board.Size / 2) * BoardCellSymbolsCount) + 1;
-            PrintBoardSide(startRow, startRow + totalRows, rigthBorderStartCol, rigthBorderStartCol + Renderer.BorderSize);
-            PrintVerticalSymbols(startBoardRow, totalBoardRows, varticalBoardSymbolRigthCol, board, Renderer.VerticalBoardFirstSymbol);
+            this.PrintBoardSide(startRow, startRow + totalRows, rigthBorderStartCol, rigthBorderStartCol + Renderer.BorderSize);
+            this.PrintVerticalSymbols(startBoardRow, totalBoardRows, varticalBoardSymbolRigthCol, board, Renderer.VerticalBoardFirstSymbol);
         }
 
-        private void PrintHorizontalSymbols(int startCol, int totalCols, int HorizontalBoardSymbolTopRow, IBoard board, char symbol)
+        private void PrintHorizontalSymbols(int startCol, int totalCols, int horizontalBoardSymbolTopRow, IBoard board, char symbol)
         {
             for (int i = startCol; i < startCol + totalCols; i += BoardCellSymbolsCount)
             {
-                Console.SetCursorPosition(i, HorizontalBoardSymbolTopRow);
+                Console.SetCursorPosition(i, horizontalBoardSymbolTopRow);
                 Console.Write(symbol);
                 symbol++;
             }

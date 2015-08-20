@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
 
-    using Chess.Helpers;
     using Chess.Figures.Common;
+    using Chess.Helpers;
 
     public interface IPlayer
     {
@@ -17,7 +17,7 @@
 
         IList<IFigure> TakenFigures { get; }
 
-        void TakeFigure(Position position,IFigure figure, IPlayer secondPlayer);
+        void TakeFigure(Position position, IFigure figure, IPlayer secondPlayer);
 
         void AddFigure(Position position, IFigure figure);
 

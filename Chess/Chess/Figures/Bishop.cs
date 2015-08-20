@@ -3,8 +3,8 @@
     using System.Collections.Generic;
 
     using Chess.Figures;
-    using Chess.Helpers;
     using Chess.Figures.Common;
+    using Chess.Helpers;
     using Chess.Movements.Common;
 
     public class Bishop : Figure, IFigure

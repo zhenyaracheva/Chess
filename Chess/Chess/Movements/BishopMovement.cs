@@ -4,8 +4,8 @@
 
     using Chess.Board.Common;
     using Chess.Figures.Common;
-    using Chess.Movements.Common;
     using Chess.Helpers;
+    using Chess.Movements.Common;
 
     public class BishopMovement : Movement, IMovement
     {
@@ -25,15 +25,15 @@
             var row = move.From.Row;
             var col = move.From.Col;
 
-            var endRow = move.To.Row + rowDirection * (-1);
-            var endCol = move.To.Col + colDirection * (-1);
+            var endRow = move.To.Row + (rowDirection * (-1));
+            var endCol = move.To.Col + (colDirection * (-1));
 
             while (row != endRow && col != endCol)
             {
                 row += rowDirection;
                 col += colDirection;
 
-                if ( board.SeeFigureOnPosition(row, col) != null)
+                if (board.SeeFigureOnPosition(row, col) != null)
                 {
                     throw new InvalidOperationException(string.Format(GlobalConstants.ExceptionMessege, figure.Type));
                 }

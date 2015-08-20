@@ -5,17 +5,17 @@
     using System.Linq;
     using System.Threading;
 
-    using Chess.Helpers;
-    using Chess.Movements;
     using Chess.Board;
     using Chess.Board.Common;
     using Chess.Figures.Common;
+    using Chess.Helpers;
+    using Chess.Movements;
     using Chess.Movements.Common;
     using Chess.Players;
     using Chess.Players.Common;
-    using Chess.Renderers.Common;
     using Chess.Renderers;
-
+    using Chess.Renderers.Common;
+    
     public class ChessStandardGame
     {
         private readonly IRenderer renderer;
@@ -44,63 +44,61 @@
             {
                 try
                 {
-                    renderer.RenderBoard(gameBoard);
-                    var attacker = GetPlayerByState(whitePlayer, blackPlayer, State.OnTheMove);
-                    var defender = GetPlayerByState(whitePlayer, blackPlayer, State.NotOnTheMove);
+                    this.renderer.RenderBoard(this.gameBoard);
+                    var attacker = this.GetPlayerByState(this.whitePlayer, this.blackPlayer, State.OnTheMove);
+                    var defender = this.GetPlayerByState(this.whitePlayer, this.blackPlayer, State.NotOnTheMove);
 
-                    renderer.PrintTakeCommandMessage(attacker);
+                    this.renderer.PrintTakeCommandMessage(attacker);
                     var currentCommad = Console.ReadLine();
-                    var move = Command.ParseCommand(currentCommad, gameBoard);
+                    var move = Command.ParseCommand(currentCommad, this.gameBoard);
 
                     this.CheckPlayerContainsFigure(attacker, move.From);
                     this.CheckIfToPositionIsTakenByAttacker(attacker, move.To);
 
-                    var playFigure = gameBoard.SeeFigureOnPosition(move.From.Row, move.From.Col);
+                    var playFigure = this.gameBoard.SeeFigureOnPosition(move.From.Row, move.From.Col);
 
                     var availableMovements = playFigure.Move(this.strategy);
                     this.CheckValidMove(playFigure, availableMovements, move);
 
-                    //find best place to check check
-                    // Check 
-                      var kingPosition = FindKingPosition(attacker);
-                      if (kingPosition == null)
-                      {
-                          Console.Clear();
-                          Console.WriteLine("GAME OVER!");
-                          break;
-                      }
-                     
+                    /// find best place to check check
+                    /// Check 
+                    var kingPosition = this.FindKingPosition(attacker);
+                    if (kingPosition == null)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("GAME OVER!");
+                        break;
+                    }
+
                     // try use attacker.Figures instead of gameBoard!
-                      if (this.CheckIfCheck(gameBoard, kingPosition, defender.Figures))
-                      {
-                          Console.Clear();
-                          Console.WriteLine("NAILED!");
-                          break;
-                      }
+                    if (this.CheckIfCheck(this.gameBoard, kingPosition, defender.Figures))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("NAILED!");
+                        break;
+                    }
 
+                    /// TODO:
+                    /// Castling
+                    /// En passant
+                    /// Promotion
+                    /// Check
+                    /// End of the game
+                    /// - Win/Lose
+                    /// - Draw
+                    /// If you have nothing else to do: Time control
 
-                    //TODO:
-                    // Castling
-                    // En passant
-                    // Promotion
-                    // Check
-                    // End of the game
-                    // - Win/Lose
-                    // - Draw
-                    // If you have nothing else to do: Time control
-
-
-                    this.TakeDefenderFigure(attacker, defender, move, gameBoard);
+                    this.TakeDefenderFigure(attacker, defender, move, this.gameBoard);
                     this.MoveFigures(move, playFigure);
 
                     attacker.RemoveFigure(move.From);
                     attacker.AddFigure(move.To, playFigure);
-                    TogglePlayerState(whitePlayer);
-                    TogglePlayerState(blackPlayer);
+                    this.TogglePlayerState(this.whitePlayer);
+                    this.TogglePlayerState(this.blackPlayer);
                 }
                 catch (Exception ex)
                 {
-                    renderer.PrintMessage(ex.Message);
+                    this.renderer.PrintMessage(ex.Message);
                     Thread.Sleep(1000);
                 }
             }
@@ -133,8 +131,6 @@
 
             return true;
         }
-
-
 
         private Position FindKingPosition(IPlayer attacker)
         {
@@ -171,7 +167,6 @@
         {
             var validMove = false;
             var fountExeprition = new Exception();
-            var counter = 0;
 
             // try
             // {
@@ -187,9 +182,7 @@
                 {
                     fountExeprition = ex;
                 }
-
             }
-
 
             if (!validMove)
             {

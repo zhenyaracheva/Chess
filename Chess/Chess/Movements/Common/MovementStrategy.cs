@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
+    using Chess.Figures.Common;
     using Chess.Helpers;
     using Chess.Movements;
-    using Chess.Figures.Common;
 
     public class MovementStrategy : IMovementStrategy
     {
@@ -15,31 +15,26 @@
                      new PawnMovement()
                  } 
             }, 
-
             { FigureType.Rook, new List<IMovement>
                  {
                      new RookMovement()
                  } 
             },
-
              { FigureType.Bishop, new List<IMovement>
                  {
                      new BishopMovement()
                  } 
             },
-
              { FigureType.Knight, new List<IMovement>
                  {
                      new KnightMovement()
                  } 
             },
-
              { FigureType.King, new List<IMovement>
                  {
                      new KingMovement()
                  } 
             },
-
              { FigureType.Queen, new List<IMovement>
                  {
                      new RookMovement(),
