@@ -15,7 +15,7 @@
     using Chess.Players.Common;
     using Chess.Renderers;
     using Chess.Renderers.Common;
-    
+
     public class ChessStandardGame
     {
         private readonly IRenderer renderer;
@@ -55,13 +55,6 @@
                     this.CheckPlayerContainsFigure(attacker, move.From);
                     this.CheckIfToPositionIsTakenByAttacker(attacker, move.To);
 
-                    var playFigure = this.gameBoard.SeeFigureOnPosition(move.From.Row, move.From.Col);
-
-                    var availableMovements = playFigure.Move(this.strategy);
-                    this.CheckValidMove(playFigure, availableMovements, move);
-
-                    /// find best place to check check
-                    /// Check 
                     var kingPosition = this.FindKingPosition(attacker);
                     if (kingPosition == null)
                     {
@@ -70,13 +63,32 @@
                         break;
                     }
 
+                    var playFigure = this.gameBoard.SeeFigureOnPosition(move.From.Row, move.From.Col);
+
+
                     // try use attacker.Figures instead of gameBoard!
                     if (this.CheckIfCheck(this.gameBoard, kingPosition, defender.Figures))
                     {
-                        Console.Clear();
-                        Console.WriteLine("NAILED!");
-                        break;
+                        this.CheckIfToPositionSafeKing(attacker, playFigure, move, gameBoard, kingPosition, defender.Figures);
                     }
+
+                    var king = this.gameBoard.SeeFigureOnPosition(kingPosition.Row, kingPosition.Col);
+
+                    if (playFigure.Type == FigureType.Rook && playFigure.IsFirstMove && this.CheckIfCastleMove(this.gameBoard, move, playFigure, king, kingPosition, attacker))
+                    {
+                        playFigure.IsFirstMove = false;
+                        king.IsFirstMove = false;
+                    }
+                    else
+                    {
+                        var availableMovements = playFigure.Move(this.strategy);
+                        this.CheckValidMove(playFigure, availableMovements, move);
+                        this.TakeDefenderFigure(attacker, defender, move, this.gameBoard);
+                        this.MoveFigures(move, playFigure);
+                        attacker.RemoveFigure(move.From);
+                        attacker.AddFigure(move.To, playFigure);
+                    }
+
 
                     /// TODO:
                     /// Castling
@@ -88,11 +100,7 @@
                     /// - Draw
                     /// If you have nothing else to do: Time control
 
-                    this.TakeDefenderFigure(attacker, defender, move, this.gameBoard);
-                    this.MoveFigures(move, playFigure);
 
-                    attacker.RemoveFigure(move.From);
-                    attacker.AddFigure(move.To, playFigure);
                     this.TogglePlayerState(this.whitePlayer);
                     this.TogglePlayerState(this.blackPlayer);
                 }
@@ -102,6 +110,89 @@
                     Thread.Sleep(1000);
                 }
             }
+        }
+
+        private bool CheckIfCastleMove(IBoard gameBoard, Move move, IFigure playFigure, IFigure king, Position kingPosition, IPlayer attacker)
+        {
+            if (playFigure.Color == FigureColor.White && move.From.Row == 7 && move.From.Col == 0)
+            {
+                this.gameBoard.SetFigure(7, 3, playFigure);
+                this.gameBoard.SetFigure(7, 2, king);
+                this.gameBoard.GetFigure(kingPosition.Row, kingPosition.Col);
+                this.gameBoard.GetFigure(7, 0);
+
+                attacker.RemoveFigure(move.From);
+                attacker.AddFigure(new Position(7, 3), playFigure);
+                attacker.RemoveFigure(kingPosition);
+                attacker.AddFigure(new Position(7, 2), king);
+
+                return true;
+            }
+
+            if (playFigure.Color == FigureColor.White && move.From.Row == 7 && move.From.Col == 7)
+            {
+                this.gameBoard.SetFigure(7, 5, playFigure);
+                this.gameBoard.SetFigure(7, 6, king);
+                this.gameBoard.GetFigure(kingPosition.Row, kingPosition.Col);
+                this.gameBoard.GetFigure(7, 7);
+
+                attacker.RemoveFigure(move.From);
+                attacker.AddFigure(new Position(7, 5), playFigure);
+                attacker.RemoveFigure(kingPosition);
+                attacker.AddFigure(new Position(7, 6), king);
+
+                return true;
+            }
+
+            if (playFigure.Color == FigureColor.Black && move.From.Row == 0 && move.From.Col == 0)
+            {
+                this.gameBoard.SetFigure(0, 3, playFigure);
+                this.gameBoard.SetFigure(0, 2, king);
+                this.gameBoard.GetFigure(kingPosition.Row, kingPosition.Col);
+                this.gameBoard.GetFigure(0, 0);
+
+                attacker.RemoveFigure(move.From);
+                attacker.AddFigure(new Position(0, 3), playFigure);
+                attacker.RemoveFigure(kingPosition);
+                attacker.AddFigure(new Position(0, 2), king);
+
+                return true;
+            }
+
+            if (playFigure.Color == FigureColor.Black && move.From.Row == 0 && move.From.Col == 7)
+            {
+                this.gameBoard.SetFigure(0, 5, playFigure);
+                this.gameBoard.SetFigure(0, 6, king);
+                this.gameBoard.GetFigure(kingPosition.Row, kingPosition.Col);
+                this.gameBoard.GetFigure(0, 7);
+
+                attacker.RemoveFigure(move.From);
+                attacker.AddFigure(new Position(0, 5), playFigure);
+                attacker.RemoveFigure(kingPosition);
+                attacker.AddFigure(new Position(0, 6), king);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void CheckIfToPositionSafeKing(IPlayer attacker, IFigure playFigure, Move move, IBoard gameBoard, Position kingPosition, IDictionary<Position, IFigure> defenderFigures)
+        {
+            var toFigure = gameBoard.SeeFigureOnPosition(move.To.Row, move.To.Col);
+            gameBoard.SetFigure(move.To.Row, move.To.Col, playFigure);
+            gameBoard.SetFigure(move.From.Row, move.From.Col, null);
+            kingPosition = this.FindKingPosition(attacker);
+
+            if (this.CheckIfCheck(gameBoard, kingPosition, defenderFigures))
+            {
+                gameBoard.SetFigure(move.To.Row, move.To.Col, toFigure);
+                gameBoard.SetFigure(move.From.Row, move.From.Col, playFigure);
+
+                throw new InvalidOperationException("Under Chess Save Your King!");
+            }
+
+            gameBoard.SetFigure(move.To.Row, move.To.Col, toFigure);
+            gameBoard.SetFigure(move.From.Row, move.From.Col, playFigure);
         }
 
         private bool CheckIfCheck(IBoard gameBoard, Position kingPosition, IDictionary<Position, IFigure> defenderFigures)

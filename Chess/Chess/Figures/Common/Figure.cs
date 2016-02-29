@@ -1,9 +1,7 @@
 ﻿namespace Chess.Figures.Common
 {
     using System.Collections.Generic;
-
-    using Chess.Helpers;
-    using Chess.Movements;
+    
     using Chess.Movements.Common;
 
     public abstract class Figure : IFigure
