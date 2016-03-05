@@ -9,7 +9,7 @@
 
     public class RookMovement : Movement, IMovement
     {
-        public void ValidateMove(IFigure figure, IBoard board, Move move)
+        public override void ValidateMove(IFigure figure, IBoard board, Move move)
         {
             var rowDistance = Math.Abs(move.From.Row - move.To.Row);
             var colDistance = Math.Abs(move.From.Col - move.To.Col);
@@ -28,8 +28,8 @@
             var row = move.From.Row;
             var col = move.From.Col;
 
-            var finalRow = move.To.Row + (rowDirection * (-1));
-            var finalCol = move.To.Col + (colDirection * (-1));
+            var finalRow = move.To.Row;// + (rowDirection * (-1));
+            var finalCol = move.To.Col;// + (colDirection * (-1));
 
             while (true)
             {

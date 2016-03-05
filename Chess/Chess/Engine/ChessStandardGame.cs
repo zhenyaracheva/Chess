@@ -2,14 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading;
 
     using Chess.Board;
     using Chess.Board.Common;
     using Chess.Figures.Common;
     using Chess.Helpers;
-    using Chess.Movements;
     using Chess.Movements.Common;
     using Chess.Players;
     using Chess.Players.Common;
@@ -65,41 +63,33 @@
 
                     var playFigure = this.gameBoard.SeeFigureOnPosition(move.From.Row, move.From.Col);
 
-
                     // try use attacker.Figures instead of gameBoard!
                     if (this.CheckIfCheck(this.gameBoard, kingPosition, defender.Figures))
                     {
                         this.CheckIfToPositionSafeKing(attacker, playFigure, move, gameBoard, kingPosition, defender.Figures);
                     }
 
-                    var king = this.gameBoard.SeeFigureOnPosition(kingPosition.Row, kingPosition.Col);
+                    var availableMovements = playFigure.Move(this.strategy);
+                    this.CheckValidMove(playFigure, availableMovements, move);
+                    this.TakeDefenderFigure(attacker, defender, move, this.gameBoard);
+                    this.MoveFigures(move, playFigure);
 
-                    if (playFigure.Type == FigureType.Rook && playFigure.IsFirstMove && this.CheckIfCastleMove(this.gameBoard, move, playFigure, king, kingPosition, attacker))
+                    if (playFigure.Type == FigureType.King &&
+                        ((move.From.Col + 2) == move.To.Col || (move.From.Col - 2 == move.To.Col)))
                     {
-                        playFigure.IsFirstMove = false;
-                        king.IsFirstMove = false;
-                    }
-                    else
-                    {
-                        var availableMovements = playFigure.Move(this.strategy);
-                        this.CheckValidMove(playFigure, availableMovements, move);
-                        this.TakeDefenderFigure(attacker, defender, move, this.gameBoard);
-                        this.MoveFigures(move, playFigure);
-                        attacker.RemoveFigure(move.From);
-                        attacker.AddFigure(move.To, playFigure);
+                        MoveRookCastle(move, attacker);
                     }
 
+                    attacker.RemoveFigure(move.From);
+                    attacker.AddFigure(move.To, playFigure);
 
                     /// TODO:
-                    /// Castling
                     /// En passant
                     /// Promotion
-                    /// Check
                     /// End of the game
                     /// - Win/Lose
                     /// - Draw
                     /// If you have nothing else to do: Time control
-
 
                     this.TogglePlayerState(this.whitePlayer);
                     this.TogglePlayerState(this.blackPlayer);
@@ -112,68 +102,21 @@
             }
         }
 
-        private bool CheckIfCastleMove(IBoard gameBoard, Move move, IFigure playFigure, IFigure king, Position kingPosition, IPlayer attacker)
+        private void MoveRookCastle(Move move, IPlayer attacker)
         {
-            if (playFigure.Color == FigureColor.White && move.From.Row == 7 && move.From.Col == 0)
-            {
-                this.gameBoard.SetFigure(7, 3, playFigure);
-                this.gameBoard.SetFigure(7, 2, king);
-                this.gameBoard.GetFigure(kingPosition.Row, kingPosition.Col);
-                this.gameBoard.GetFigure(7, 0);
+            var isLongCastle = move.From.Col > move.To.Col;
+            var rookRow = move.From.Row;
+            var rookFromCol = isLongCastle ? 0 : 7;
+            var rookToCol = isLongCastle ? move.From.Col - 1 : move.From.Col + 1;
+            var rook = this.gameBoard.SeeFigureOnPosition(rookRow, rookFromCol);
 
-                attacker.RemoveFigure(move.From);
-                attacker.AddFigure(new Position(7, 3), playFigure);
-                attacker.RemoveFigure(kingPosition);
-                attacker.AddFigure(new Position(7, 2), king);
+            var rookFromPosition = new Position(rookRow, rookFromCol);
+            var rookToPosition = new Position(rookRow, rookToCol);
+            var rookMove = new Move(rookFromPosition, rookToPosition);
 
-                return true;
-            }
-
-            if (playFigure.Color == FigureColor.White && move.From.Row == 7 && move.From.Col == 7)
-            {
-                this.gameBoard.SetFigure(7, 5, playFigure);
-                this.gameBoard.SetFigure(7, 6, king);
-                this.gameBoard.GetFigure(kingPosition.Row, kingPosition.Col);
-                this.gameBoard.GetFigure(7, 7);
-
-                attacker.RemoveFigure(move.From);
-                attacker.AddFigure(new Position(7, 5), playFigure);
-                attacker.RemoveFigure(kingPosition);
-                attacker.AddFigure(new Position(7, 6), king);
-
-                return true;
-            }
-
-            if (playFigure.Color == FigureColor.Black && move.From.Row == 0 && move.From.Col == 0)
-            {
-                this.gameBoard.SetFigure(0, 3, playFigure);
-                this.gameBoard.SetFigure(0, 2, king);
-                this.gameBoard.GetFigure(kingPosition.Row, kingPosition.Col);
-                this.gameBoard.GetFigure(0, 0);
-
-                attacker.RemoveFigure(move.From);
-                attacker.AddFigure(new Position(0, 3), playFigure);
-                attacker.RemoveFigure(kingPosition);
-                attacker.AddFigure(new Position(0, 2), king);
-
-                return true;
-            }
-
-            if (playFigure.Color == FigureColor.Black && move.From.Row == 0 && move.From.Col == 7)
-            {
-                this.gameBoard.SetFigure(0, 5, playFigure);
-                this.gameBoard.SetFigure(0, 6, king);
-                this.gameBoard.GetFigure(kingPosition.Row, kingPosition.Col);
-                this.gameBoard.GetFigure(0, 7);
-
-                attacker.RemoveFigure(move.From);
-                attacker.AddFigure(new Position(0, 5), playFigure);
-                attacker.RemoveFigure(kingPosition);
-                attacker.AddFigure(new Position(0, 6), king);
-                return true;
-            }
-
-            return false;
+            this.MoveFigures(rookMove, rook);
+            attacker.RemoveFigure(rookMove.From);
+            attacker.AddFigure(rookMove.To, rook);
         }
 
         private void CheckIfToPositionSafeKing(IPlayer attacker, IFigure playFigure, Move move, IBoard gameBoard, Position kingPosition, IDictionary<Position, IFigure> defenderFigures)
@@ -259,8 +202,6 @@
             var validMove = false;
             var fountExeprition = new Exception();
 
-            // try
-            // {
             foreach (var movement in availableMovements)
             {
                 try

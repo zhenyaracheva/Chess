@@ -4,9 +4,9 @@
     using Chess.Figures.Common;
     using Chess.Helpers;
 
-    public class Movement : IMovement
+    public abstract class Movement : IMovement
     {
-        public void ValidateMove(IFigure figure, IBoard board, Move move)
+        public virtual void ValidateMove(IFigure figure, IBoard board, Move move)
         {
            if (figure.IsFirstMove)
            {
